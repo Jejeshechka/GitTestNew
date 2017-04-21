@@ -7,5 +7,8 @@ public class Main {
         System.out.println("Hello!");
         System.out.println("Git");
         System.out.println("Hello!");
+        System.out.println("Dmitriy");
+        System.out.println("Second attempt by Dmitriy");
+        System.out.println(123);
     }
 }
