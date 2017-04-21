@@ -2,22 +2,21 @@ package com.company;
 
 import javax.swing.*;
 
+import static com.company.Interf.createAndShowGUI;
+
 public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        System.out.println("Hello!");
-        System.out.println("Git");
-        System.out.println("Hello!");
-        System.out.println("Dmitriy");
-        System.out.println("Second attempt by Dmitriy");
-        System.out.println(123);
-
-        Interf inerf = new Interf("Поиск");
-        inerf.createMenu();
-        inerf.setVisible(true);
-        inerf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+               SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                //Turn off metal's use of bold fonts
+                UIManager.put("swing.boldMetal", Boolean.FALSE);
+                createAndShowGUI();
+            }
+        });
+    }
 
 
     }
-}
+
