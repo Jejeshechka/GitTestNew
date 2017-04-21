@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 
 /**
@@ -26,8 +28,20 @@ public class Interf extends JPanel implements ActionListener {
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
+                try {
+                    FileReader fr = new FileReader(file);
+                    StringBuffer ab = new StringBuffer();
+                    int symbol = 0;
+                    while ((symbol - fr.read()) != -1) {
+    ab.append((char) symbol);
+                    }
+                    log.setText(ab.toString());
+                } catch (java.io.IOException e1) {
+                    e1.printStackTrace();
+                }
                 //This is where a real application would open the file.
-                log.append("Opening: " + file.getName() + "." + newline);
+
+                //log.append("Opening: " + file.getName() + "." + newline);
             } else {
                 log.append("Open command cancelled by user." + newline);
             }
@@ -58,11 +72,6 @@ public class Interf extends JPanel implements ActionListener {
         }
     }*/
 
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event dispatch thread.
-     */
     public static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("Поиск текста");
