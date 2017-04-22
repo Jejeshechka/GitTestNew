@@ -4,10 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 /**
@@ -15,7 +12,7 @@ import java.io.FileReader;
  */
 public class Interf extends JPanel implements ActionListener {
     static private final String newline = "\n";
-    JButton openButton, saveButton;
+    JButton openButton;
     JTextArea log;
     JFileChooser fc;
 
@@ -28,37 +25,33 @@ public class Interf extends JPanel implements ActionListener {
                 File file = fc.getSelectedFile();
                 try {
                     FileReader fr = new FileReader(file);
-                    StringBuffer ab = new StringBuffer();
-                    int symbol = 0;
-                    while ((symbol - fr.read()) != -1) {
-                        ab.append((char) symbol);
+                    StringBuilder sb = new StringBuilder();
+                    char[] cbuf = new char[1024];
+                    int r;
+                    while ((r = fr.read(cbuf, 0, 1024)) != -1) {
+                        sb.append(cbuf, 0, r);
                     }
-                    log.setText(ab.toString());
+                    String s = sb.toString();
+
+                    for (int i = 0; i < s.length(); ) {
+                        int cp = s.codePointAt(i); // Unicode code point
+                        i += Character.charCount(cp);
+                    }
+                    log.setText(s);
                 } catch (java.io.IOException e1) {
                     e1.printStackTrace();
                 }
-                //This is where a real application would open the file.
-
-                //log.append("Opening: " + file.getName() + "." + newline);
             } else {
                 log.append("Open command cancelled by user." + newline);
             }
             log.setCaretPosition(log.getDocument().getLength());
 
-            //Handle save button action.
-        } else if (e.getSource() == saveButton) {
-            int returnVal = fc.showSaveDialog(Interf.this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                //This is where a real application would save the file.
-                log.append("Saving: " + file.getName() + "." + newline);
-            } else {
-                log.append("Save command cancelled by user." + newline);
-            }
-            log.setCaretPosition(log.getDocument().getLength());
+        } else {
+            log.append("Save command cancelled by user." + newline);
         }
+        log.setCaretPosition(log.getDocument().getLength());
     }
-//Мотод создания фрейма и видимость его
+    //Мотод создания фрейма и видимость его
     public static void createAndShowGUI() {
         //Создание и настройка окна
         JFrame frame = new JFrame("Поиск текста");
@@ -69,7 +62,6 @@ public class Interf extends JPanel implements ActionListener {
         frame.pack();
         frame.setVisible(true);
     }
-
     public Interf() {
         super(Boolean.parseBoolean(String.valueOf(new BorderLayout())));
         log = new JTextArea(5, 20);
